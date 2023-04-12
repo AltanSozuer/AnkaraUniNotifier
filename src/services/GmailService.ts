@@ -39,7 +39,7 @@ export class GMailService implements IMailer {
     }
 
     async sendMail( mailOptions: IMailOptions ) {
-        try{
+        try {
             const accessToken = await this.mailClient.getAccessToken();
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
