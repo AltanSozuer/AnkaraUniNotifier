@@ -4,4 +4,5 @@ export interface IMailOptions {
     subject: string;
     description: string;
     text: string;
+    html: string;
 }
