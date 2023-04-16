@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "CommonJS",                                /* Specify what module code is generated. */
-    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+    "target": "es2016",
+    "module": "CommonJS",
+    "esModuleInterop": true,
     "lib": ["ES6"],
     "rootDir": "src/",
     "resolveJsonModule": true,
@@ -10,7 +10,7 @@
     "outDir": "build/",
     "noImplicitAny": true,
     "allowJs": false,
-    "strict": true,                                      /* Enable all strict type-checking options. */
+    "strict": true
   },
   "include": ["./src"],
   "exclude": ["./node_modules", "./build"]
