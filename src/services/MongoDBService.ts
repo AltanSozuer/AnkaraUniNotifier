@@ -13,9 +13,7 @@ class MongoDBService {
         serverSelectionTimeoutMS: Number(MONGO_SERVER_SELECTION_TIMEOUT) || 5000
     }
 
-    constructor() {
-        this.connectDB();
-    }
+    constructor() {}
 
     getMongoose() {
         return mongoose;
@@ -29,17 +27,10 @@ class MongoDBService {
         return mongoose.connections.length > 1;
     }
 
-    connectDB() {
+    async connectDB() {
         try {
             if(!this.isConnected()) {
-                mongoose.connect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}`, this.mongoOptions)
-                .then( () => {
-                    console.log('Mongodb is connected. ');
-                    
-                })
-                .catch(err => {
-                    console.log('Mongodb connection is failed. ',err);
-                })
+                await mongoose.connect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}`, this.mongoOptions)
             }
             else {
                 console.log('MongoDB Client is already connected to database');
@@ -60,6 +51,21 @@ class MongoDBService {
             console.log('MongoDBService.disconnect() is failed. ', err);
             
         }
+    }
+    
+    async clearCollections(): Promise<void> {
+        try{
+            const db = this.getMongoose().connection.db;       
+            const coll = await db.listCollections().toArray();
+            
+            coll.map( col => col.name).forEach( async ( name ) => {
+                db.dropCollection(name)
+            })
+        }
+        catch(err) {
+            console.log('MongoSBService.clearCollections() is failed. ',err);
+        }
+    
     }
 }
 
