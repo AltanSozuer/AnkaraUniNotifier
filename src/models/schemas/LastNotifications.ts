@@ -1,5 +1,14 @@
 export const LastNotifications = {
-    date: String,
-    website: String,
-    detail: String
+    date: {
+        type: String,
+        required: true
+    },
+    website: {
+        type: String,
+        required: true
+    },
+    detail: {
+        type: String,
+        required: true
+    }
 }
