@@ -1,8 +1,8 @@
-interface UsersCreateDTO {
+interface IUser {
     name: string;
     surname: string;
     email: string;
 }
 
 
-export { UsersCreateDTO }
+export default IUser;
