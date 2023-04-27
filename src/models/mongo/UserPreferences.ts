@@ -26,6 +26,6 @@ const UserPreferencesRaw = {
 }
 
 const userPreferencesSchema = new Schema<IUserPreferences>(UserPreferencesRaw)
-const FacultyDomainModel = MongoDBService.getMongoose().models.UserPreferences || MongoDBService.getMongoose().model<IUserPreferences>('UserPreferences', userPreferencesSchema);
+const UserPreferencesModel = MongoDBService.getMongoose().models.UserPreferences || MongoDBService.getMongoose().model<IUserPreferences>('UserPreferences', userPreferencesSchema);
 
-export default FacultyDomainModel;
+export default UserPreferencesModel;

@@ -18,13 +18,18 @@ export class NotificationService {
 
 
     async updateLastNotification(oldNotifISODate: string , newNotificationFields: INotification) {
-        const oldNotification = await NotificationModel.findOneAndUpdate(
-            { date: oldNotifISODate },
-            { $set: newNotificationFields },
-            { new: true }
-        ).exec();
-
-        return oldNotification;
+        try{
+            const updatedNotification = await NotificationModel.findOneAndUpdate(
+                { date: oldNotifISODate },
+                { $set: newNotificationFields },
+                { new: true }
+            ).exec();
+    
+            return updatedNotification;
+        }
+        catch(err) {
+            throw new Error(err as string);
+        }
     }
 
 }
