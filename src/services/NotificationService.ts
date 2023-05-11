@@ -6,18 +6,20 @@ import MongoDBService from "./MongoDBService";
 export class NotificationService {
     constructor() {}
 
-    async createNotification( notificationFields: INotification) {
-        const notification = new NotificationModel(notificationFields)
-        await notification.save();
-        return NotificationModel.findOne({ date: notificationFields.date })
+    async createNotifications( notificationFields: INotification[]) {
+        return NotificationModel.insertMany(notificationFields)
     }
 
     async getLastNotification() {
         return NotificationModel.find().limit(1).sort({ $natural: -1 }).exec();
     }
 
+    async getLatestNotificationByDate() {
+        return NotificationModel.find().limit(1).sort({ date: -1 }).exec();
+    }
 
-    async updateLastNotification(oldNotifISODate: string , newNotificationFields: INotification) {
+
+    async updateLastNotification(oldNotifISODate: Date , newNotificationFields: INotification) {
         try{
             const updatedNotification = await NotificationModel.findOneAndUpdate(
                 { date: oldNotifISODate },

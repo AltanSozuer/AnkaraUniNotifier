@@ -1,5 +1,5 @@
 interface INotification {
-    date: string;
+    date: Date;
     website: string;
     detail: string;
 }

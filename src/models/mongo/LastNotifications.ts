@@ -4,7 +4,7 @@ const Schema = MongoDBService.getSchema();
 
 const NotificationRaw = {
     date: {
-        type: String,
+        type: Date,
         required: true
     },
     website: {
