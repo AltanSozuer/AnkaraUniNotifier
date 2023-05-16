@@ -1,4 +1,9 @@
-export const FACULTY_DOMAINS = [
+interface FacultyDomain {
+    name: string;
+    website: string;
+}
+
+export const FACULTY_DOMAINS: FacultyDomain[] = [
     {
         name: "Ankara Üniversitesi Bilgisayar Mühendisliği",
         website: "http://comp.eng.ankara.edu.tr/feed"
@@ -24,3 +29,5 @@ export const FACULTY_DOMAINS = [
         website: "http://ogrencidekanligi.ankara.edu.tr/feed"
     }
 ]
+
+export const facultyNameList = FACULTY_DOMAINS.map( obj => obj.name );
