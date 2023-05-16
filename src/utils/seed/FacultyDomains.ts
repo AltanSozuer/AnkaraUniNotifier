@@ -3,7 +3,7 @@ import { FACULTY_DOMAINS } from "../../constants/FacultyDomains"
 
 const seedDB = async () : Promise<void> => {
     await FacultyDomainModel.deleteMany({});
-    await FacultyDomainModel.insertMany(FACULTY_DOMAINS);
+    await FacultyDomainModel.insertMany(Object.values(FACULTY_DOMAINS));
 }
 
 

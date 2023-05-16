@@ -14,7 +14,7 @@ export function main() {
         // const gmailService = new GMailService();
         const notifService = new NotificationService();
         const rssService = new RssService();
-        FACULTY_DOMAINS.forEach( async (facultyObj) => {
+        Object.values(FACULTY_DOMAINS).forEach( async (facultyObj) => {
             const results = await rssService.parseURL(facultyObj.website);
             if(results.length > 0) {
                 const lastAnnouncement = await notifService.getLatestNotificationByDate();
