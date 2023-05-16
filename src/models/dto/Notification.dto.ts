@@ -1,7 +1,10 @@
 interface INotification {
     date: Date;
-    website: string;
-    detail: string;
+    from: string;
+    notificationTitle: string;
+    notificationContent: string;
+    link: string;
+    guidLink: string;
 }
 
 

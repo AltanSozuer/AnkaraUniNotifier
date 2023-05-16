@@ -7,14 +7,27 @@ const NotificationRaw = {
         type: Date,
         required: true
     },
-    website: {
+    from: {
         type: String,
         required: true
     },
-    detail: {
+    notificationTitle: {
         type: String,
         required: true
-    }
+    },
+    notificationContent: {
+        type: String,
+        required: true
+    },
+    link: {
+        type: String,
+        required: true
+    },
+    guidLink: {
+        type: String,
+        required: true,
+        unique: true
+    },
 }
 
 const notificationSchema = new Schema<INotification>(NotificationRaw)

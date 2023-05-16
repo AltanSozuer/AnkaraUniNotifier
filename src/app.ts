@@ -19,13 +19,16 @@ export function main() {
             if(results.length > 0) {
                 const lastAnnouncement = await notifService.getLatestNotificationByDate();
 
-                const lastNotifDataList = results.filter(( notif => new Date(notif.isoDate) > lastAnnouncement[0].date.toString()))
+                const lastNotifDataList = results.filter(( notif => new Date(notif.isoDate).getTime() > new Date(lastAnnouncement[0].date).getTime()))
             
                 if(lastNotifDataList.length){
                     const rawNotifDataList = lastNotifDataList.map( notif => ({
                         date: new Date(notif.isoDate),
-                        website: facultyObj.name,
-                        detail: notif['content:encoded']
+                        from: facultyObj.name,
+                        notificationTitle: notif.title,
+                        notificationContent: notif['content:encoded'],
+                        link: notif.link,
+                        guidLink: notif.guid.replace(" ","")
                     })).reverse() as INotification[];
                     await notifService.createNotifications(rawNotifDataList);
 

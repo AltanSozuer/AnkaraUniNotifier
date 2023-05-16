@@ -1,36 +1,19 @@
 import express from 'express'
-import dotenv from 'dotenv'
-dotenv.config()
+import { configureEnvFile } from './utils/EnvConfig.js';
+
+configureEnvFile()
 
 const app = express();
-const { PORT, MAIL_SENDER } = process.env;
-import {GMailService} from './services/GmailService.js';
-import { IMailOptions } from './models/interfaces/IMailOptions.js';
-import RssService from './services/RssService.js';
+const { PORT } = process.env;
+
+import { main } from './app.js';
+import MongoDBService from './services/MongoDBService.js';
 
 app.listen( PORT, async () => {
-    const gmailService = new GMailService();
-
-    const insta = new RssService();
-    const results = await insta.parseURL();
-    if(results.length > 0) {
-        const mailOptions: IMailOptions = {
-            from: String(MAIL_SENDER),
-            to: "sozueraltan@gmail.com",
-            subject: "Ankara Üniversitesi Bilgisayar Mühendisliği Duyuru " + new Date(results[0].isoDate).toString().split('GMT')[0],
-            description: results[0].title,
-            text: results[0].content
-        };
-        await gmailService.sendMail(mailOptions)
-    }
-    else{
-        console.log('Rss result is empty array. Result: ',results);
-        
-    }
-
+    main(); 
     console.log("listening on port " + process.env.PORT);
 })
 
 app.get('/', (req , res) => {
-    console.log("Welcome to Gmail API with Nodejs");
+    res.status(200).send("Welcome to Gmail API with Nodejs");
 })
