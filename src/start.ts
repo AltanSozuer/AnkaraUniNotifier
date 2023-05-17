@@ -1,16 +1,13 @@
-import express from 'express'
-import { configureEnvFile } from './utils/EnvConfig.js';
-
+import { configureEnvFile } from './utils/EnvConfig';
 configureEnvFile()
 
-const app = express();
+import MongoDBService from './services/MongoDBService.js';
+import app from './app.js';
+
 const { PORT } = process.env;
 
-import { main } from './app.js';
-import MongoDBService from './services/MongoDBService.js';
-
 app.listen( PORT, async () => {
-    main(); 
+    await MongoDBService.connectDB();
     console.log("listening on port " + process.env.PORT);
 })
 
