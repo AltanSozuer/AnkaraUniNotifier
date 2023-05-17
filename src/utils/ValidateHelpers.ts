@@ -3,7 +3,9 @@ import { facultyNameList } from "../constants/FacultyDomains";
 
 
 function isDateValid(candidateDate: string): boolean {
-    return dayjs(candidateDate).isValid();
+    return (typeof candidateDate === 'string' && candidateDate.trim().length)
+        ? dayjs(candidateDate).isValid()
+        : false;
 }
 
 function isDateAfterThanOther(firstDate: string, secondDate: string): boolean {

@@ -4,7 +4,7 @@ import MongoDBService from '../../src/services/MongoDBService';
 import { NotificationService } from '../../src/services/NotificationService';
 import INotification from '../../src/models/dto/Notification.dto';
 import { FACULTY_DOMAINS } from '../../src/constants/FacultyDomains';
-import { isDateBeforeThanOther, isDateAfterThanOther } from '../../src/utils/ValidateHelpers'
+import { isDateAfterThanOther } from '../../src/utils/ValidateHelpers'
 import { describe, afterAll, it, jest, expect, beforeAll, beforeEach} from '@jest/globals'
 
 jest.setTimeout(3000);
@@ -184,7 +184,7 @@ describe('getNotifications()', () => {
         expect(result[0].guidLink).toBe("http://comp.eng.ankara.edu.tr/?p=15492");
     })
 
-    it.only('002 - getNotifications() should return all exist notification data when empty array is given for byFacultyList', async () => {
+    it('002 - getNotifications() should return all exist notification data when empty array is given for byFacultyList', async () => {
         expect.assertions(2);
 
         const result = await notifService.byFacultyList([]).getNotifications();
