@@ -1,4 +1,4 @@
-import { isStringArray, isNameExistInFacultyList, isDateValid } from "../utils/ValidateHelpers";
+import { isStringArray, filterNamesThatExistInFacultyList, isDateValid } from "../utils/ValidateHelpers";
 import NotificationModel from "../models/mongo/LastNotifications";
 import INotification from "../models/dto/Notification.dto";
 import MongoDBService from "./MongoDBService";
@@ -9,8 +9,10 @@ export class NotificationService {
 
     byFacultyList( facultyList: string[] ) {
         if(isStringArray(facultyList)){
-            const validFacultyNames = facultyList.filter( name => isNameExistInFacultyList(name));
-            this.filterObj["from"] = { $in: validFacultyNames }
+            const validFacultyNames = filterNamesThatExistInFacultyList(facultyList);
+            if(validFacultyNames.length){
+                this.filterObj["from"] = { $in: validFacultyNames }
+            }
         }
         return this;
     }
@@ -39,9 +41,14 @@ export class NotificationService {
     }
 
     async getNotifications() {
-        const results = await NotificationModel.find(this.filterObj).exec();
-        this.resetFilters();
-        return results;
+        try{
+            const results = await NotificationModel.find(this.filterObj).exec();
+            this.resetFilters();
+            return results;
+        }
+        catch(err) { 
+            throw new Error('getNotification is failed')
+        }
     }
 
     async updateLastNotification(oldNotifISODate: Date , newNotificationFields: INotification) {
