@@ -22,8 +22,12 @@ function isDateBeforeThanOther(firstDate: string, secondDate: string): boolean {
 }
 
 
-function isNameExistInFacultyList(candidateName: string): boolean {
-    return facultyNameList.some( fac => fac === candidateName);
+function areNamesExistInFacultyList(candidateNameList: string[]): boolean {
+    return candidateNameList.some( fac => facultyNameList.some( fc => fc === fac));
+}
+
+function filterNamesThatExistInFacultyList(candidateNameList: string[]): string[] {
+    return candidateNameList.filter( candName => facultyNameList.some( fac => fac === candName))
 }
 
 function isStringArray( candidateParam: any ): boolean {
@@ -32,13 +36,17 @@ function isStringArray( candidateParam: any ): boolean {
     : false;
 }
 
-
+function serializeDateInJSON(key: string, value: string): Date | string {
+    return (key === 'date') ? new Date(value) : value;
+}
 
 export {
     isDateAfterThanOther,
     isDateBeforeThanOther,
-    isNameExistInFacultyList,
+    areNamesExistInFacultyList,
+    filterNamesThatExistInFacultyList,
     isStringArray,
-    isDateValid
+    isDateValid,
+    serializeDateInJSON
 }
 
