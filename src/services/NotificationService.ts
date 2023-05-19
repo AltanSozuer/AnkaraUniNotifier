@@ -2,7 +2,8 @@ import { isStringArray, filterNamesThatExistInFacultyList, isDateValid } from ".
 import NotificationModel from "../models/mongo/LastNotifications";
 import INotification from "../models/dto/Notification.dto";
 import MongoDBService from "./MongoDBService";
-
+import loggerFunc from "../utils/Logger";
+const logger = loggerFunc(__filename)
 export class NotificationService {
     private filterObj: any = {}
     constructor() {}
@@ -29,15 +30,25 @@ export class NotificationService {
     }
 
     async createNotifications( notificationFields: INotification[]) {
-        return NotificationModel.insertMany(notificationFields)
+        logger.debug('NotificationService.createNotification() is started with given param: ', {
+            notificationFields
+        })
+        try{
+            const result = await NotificationModel.insertMany(notificationFields);
+            logger.debug('NotificationService.createNotification() result: ', { result })
+        }
+        catch(err) {
+            logger.error('NotificationService.createNotification() is failed. Error: ', { error: err })
+            throw new Error('NotificationService.createNotification() is failed')
+        }
     }
 
     async getLastNotification() {
         return NotificationModel.find().limit(1).sort({ $natural: -1 }).exec();
     }
 
-    async getLatestNotificationByDate() {
-        return NotificationModel.find().limit(1).sort({ date: -1 }).exec();
+    async getLatestNotificationByDate(from : string) {
+        return NotificationModel.find({ from }).limit(1).sort({ date: -1 }).exec();
     }
 
     async getNotifications() {

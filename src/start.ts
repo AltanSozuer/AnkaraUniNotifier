@@ -3,11 +3,13 @@ configureEnvFile()
 
 import MongoDBService from './services/MongoDBService.js';
 import app from './app.js';
+import { notificationCollector } from './scripts/NotificationCollector';
 
 const { PORT } = process.env;
 
 app.listen( PORT, async () => {
     await MongoDBService.connectDB();
+    notificationCollector();
     console.log("listening on port " + process.env.PORT);
 })
 

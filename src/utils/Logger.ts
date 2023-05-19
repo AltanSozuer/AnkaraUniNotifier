@@ -33,11 +33,11 @@ function extractFileName( filePath: string ): string {
 
 function createConventionalName (filename: string): string {
     const currDate = new Date();
-    return `${currDate.getDate()}-${currDate.getMonth() +1 }-${currDate.getFullYear()}_${filename}`
+    return `${currDate.getDate()}-${currDate.getMonth() +1 }-${currDate.getFullYear()}_${filename}.log`
 }
 
 
-export default function logger( filePath: string ): Logger{
+export default function loggerFunc( filePath: string ): Logger{
     // extract filename from given filepath
     const extractedFile = extractFileName(filePath);
     // create conventional naming with date for log files
