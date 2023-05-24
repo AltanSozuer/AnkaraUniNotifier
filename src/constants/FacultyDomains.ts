@@ -3,9 +3,9 @@ export const FACULTY_DOMAINS = {
         name: "Ankara Üniversitesi Bilgisayar Mühendisliği",
         website: "http://comp.eng.ankara.edu.tr/feed"
     },
-    ANKARA_UNI_ORIGINAL:{
-        name: "Ankara Üniversitesi Original",
-        website: "https://www.ankara.edu.tr/feed"
+    ANKARA_UNI_ELEKTRIK_ELEKTRONIK: {
+        name: "Ankara Üniversitesi Elektrik Elektronik Mühendisliği",
+        website: "http://eee.ankara.edu.tr/feed/"
     },
     ANKARA_UNI_OGR_DEKANLIK:{
         name: "Ankara Üniversitesi Öğrenci Dekanlığı",

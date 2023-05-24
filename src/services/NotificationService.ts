@@ -1,7 +1,7 @@
+import escapeStringRegexp from "escape-string-regexp";
 import { isStringArray, filterNamesThatExistInFacultyList, isDateValid } from "../utils/ValidateHelpers";
 import NotificationModel from "../models/mongo/LastNotifications";
 import INotification from "../models/dto/Notification.dto";
-import MongoDBService from "./MongoDBService";
 import loggerFunc from "../utils/Logger";
 const logger = loggerFunc(__filename)
 export class NotificationService {
@@ -25,6 +25,13 @@ export class NotificationService {
         return this;
     }
 
+    byText( text: string) {
+        if(String(text) && text.length > 2 ) {
+            this.filterObj['notificationTitle'] = { $regex: escapeStringRegexp(text) }
+        }
+        return this;
+    }
+
     resetFilters() {
         this.filterObj = {};
     }
@@ -36,9 +43,12 @@ export class NotificationService {
         try{
             const result = await NotificationModel.insertMany(notificationFields);
             logger.debug('NotificationService.createNotification() result: ', { result })
+            return result
         }
         catch(err) {
-            logger.error('NotificationService.createNotification() is failed. Error: ', { error: err })
+            console.log('mine error: asd: ',err);
+            
+            logger.debug('NotificationService.createNotification() is failed. Error: ', { error: err })
             throw new Error('NotificationService.createNotification() is failed')
         }
     }
@@ -52,12 +62,22 @@ export class NotificationService {
     }
 
     async getNotifications() {
+        logger.debug('NotificationService.getNotifications() is started with given filter object: ', {
+            filterObject: this.filterObj
+        })
         try{
-            const results = await NotificationModel.find(this.filterObj).exec();
+            const results = await NotificationModel.find(this.filterObj).sort({ date: -1 }).exec();
+            logger.debug('NotificationService.getNotifications() results: ', {
+                results
+            })
+            
             this.resetFilters();
             return results;
         }
         catch(err) { 
+            logger.error('NotificationService.getNotifications() is failed. Details:  ', {
+                error: err
+            })
             throw new Error('getNotification is failed')
         }
     }
