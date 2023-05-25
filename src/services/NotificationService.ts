@@ -26,7 +26,7 @@ export class NotificationService {
     }
 
     byText( text: string) {
-        if(String(text) && text.length > 2 ) {
+        if(typeof text === 'string' && text?.length > 2 ) {
             this.filterObj['notificationTitle'] = { $regex: escapeStringRegexp(text) }
         }
         return this;

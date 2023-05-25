@@ -9,6 +9,7 @@ const logger = loggerFunc(__filename);
 router.post('/notifications', 
     body('facultyList').optional().isLength({ min: 1 }).custom(isStringArray).escape(),
     body('timeUntil').optional().isString().isLength({ min: 2 }).custom(isDateValid).escape(),
+    body('searchText').optional().isString().escape(),
     async (req: Request, res: Response, next: NextFunction) => {
     logger.info('GET /notifications is called')
     const validResult: Result = validationResult(req);
@@ -17,10 +18,13 @@ router.post('/notifications',
     })
 
     if(validResult.isEmpty()) {
-        const { facultyList, timeUntil } = req.body;
+
+        const { facultyList, timeUntil, searchText } = req.body;
+        
         logger.debug('GET /notifications given parameters: ', {
             facultyList,
-            timeUntil
+            timeUntil,
+            searchText
         })
         let validFacultyNames: string[] = [];
         if(facultyList && facultyList.length){
@@ -37,7 +41,7 @@ router.post('/notifications',
             }})
         }    
         else{
-            const results = await new NotificationService().byFacultyList(facultyList).byTime(timeUntil).getNotifications();
+            const results = await new NotificationService().byFacultyList(facultyList).byTime(timeUntil).byText(searchText).getNotifications();
             logger.debug('GET /notifications | List of notification data will be send: ', {
                 dataList: results
             })
@@ -48,7 +52,7 @@ router.post('/notifications',
         logger.error('GET /notifications | Parameters are not valid : ', {
             result: validResult.array()
         })
-        res.status(400).json({ errors: validResult.array() })
+        res.status(400).json({ error: validResult.array() })
     }
 })
 
