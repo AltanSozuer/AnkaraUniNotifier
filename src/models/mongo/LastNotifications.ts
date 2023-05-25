@@ -17,7 +17,7 @@ const NotificationRaw = {
     },
     notificationContent: {
         type: String,
-        required: true
+        required: false
     },
     link: {
         type: String,
@@ -27,7 +27,7 @@ const NotificationRaw = {
         type: String,
         required: true,
         unique: true
-    },
+    }
 }
 
 const notificationSchema = new Schema<INotification>(NotificationRaw)

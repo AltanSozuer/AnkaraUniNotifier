@@ -1,4 +1,4 @@
-import escapeStringRegexp from "escape-string-regexp";
+import { escapeStringRegexp } from "../utils/RegexHelpers";
 import { isStringArray, filterNamesThatExistInFacultyList, isDateValid } from "../utils/ValidateHelpers";
 import NotificationModel from "../models/mongo/LastNotifications";
 import INotification from "../models/dto/Notification.dto";
