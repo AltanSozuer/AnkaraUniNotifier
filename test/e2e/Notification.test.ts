@@ -268,10 +268,146 @@ describe('POST /notification', () => {
             ])
         )
     })
-    it.todo('011 - Should return 400 when given faculty name list is empty, null, array but its element is not string ( not undefined)')
-    it.todo('012 - Should return 400 when given text param is not string')
-    it.todo('013 - Should return 200 and related list of data when text is given in request body which has length > 2')
-    it.todo('014 - Should return 200 and related list of data when valid facultyList and text are given in request body')
-    it.todo('015 - Should return 200 and related list of data when valid facultyList, timeUntil and text are given in request body')
+    it('011 - Should return 400 when given faculty name list is empty, null, array but its element is not string ( not undefined)', async () => {
+        expect.assertions(6);
+        const requestFunc = async (param: any) => {
+            const res = await request(app)
+            .post('/notifications')
+            .send({
+                facultyList: param,
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .then(res => res.body)
+            .then(res => JSON.parse(JSON.stringify(res.error)))
+            
+            expect(res).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        location: 'body',
+                        msg: "Invalid value",
+                        path: "facultyList",
+                        type: 'field',
+                        value: param
+                    })
+                ])
+            )   
+        }
+        await Promise.all([
+            requestFunc(null),
+            requestFunc([]),
+            requestFunc(true),
+            requestFunc([1,2]),
+            requestFunc([null]),
+            requestFunc([1,2])
+        ])
+    })
+    it('012 - Should return 400 when given searchText param is not string', async () => {
+        expect.assertions(6);
+        const requestFunc = async (param: any) => {
+            const res = await request(app)
+            .post('/notifications')
+            .send({
+                searchText: param,
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .then(res => res.body)
+            .then(res => JSON.parse(JSON.stringify(res.error)))
+            
+            expect(res).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        location: 'body',
+                        msg: "Invalid value",
+                        path: "searchText",
+                        type: 'field',
+                        value: param
+                    })
+                ])
+            )   
+        }
+        await Promise.all([
+            requestFunc(null),
+            requestFunc([]),
+            requestFunc(true),
+            requestFunc([1,2]),
+            requestFunc([null]),
+            requestFunc([1,2])
+        ])
+    })
+    it('013 - Should return 200 and related list of data when text is given in request body which has length > 2', async () => {
+        expect.assertions(5)
+        const sampleSearchText= 'Title 3'
+        const res = await request(app)
+            .post('/notifications')
+            .send({
+                searchText : sampleSearchText
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then(res => res.body)
+            .then(res => JSON.parse(JSON.stringify(res.data), serializeDateInJSON))
+        
+        expect(res).toHaveLength(1);
+        expect(res[0].from).toBe(FACULTY_DOMAINS.ANKARA_UNI_ELEKTRIK_ELEKTRONIK.name)
+        expect(res[0].date).toEqual(new Date("2024-09-26T16:00:00.100Z"))
+        expect(notifData.filter( (rs: INotification) => rs.notificationTitle.search(sampleSearchText) >= 0 && rs.from === FACULTY_DOMAINS.ANKARA_UNI_ELEKTRIK_ELEKTRONIK.name)).toHaveLength(1);
+        expect(notifData.filter( (rs: INotification) => rs.notificationTitle.search(sampleSearchText) < 0 )).toHaveLength(3);
+
+    })
+    it('014 - Should return 200 and related list of data when valid facultyList and text are given in request body', async () => {
+        expect.assertions(5)
+        const sampleFacultyList = [
+            FACULTY_DOMAINS.ANKARA_UNI_BILGISAYAR.name, 
+            FACULTY_DOMAINS.ANKARA_UNI_ELEKTRIK_ELEKTRONIK.name,
+            FACULTY_DOMAINS.ANKARA_UNI_OGR_DEKANLIK.name];
+        const sampleSearchText= 'Title 4'
+        const res = await request(app)
+            .post('/notifications')
+            .send({
+                facultyList: sampleFacultyList,
+                searchText : sampleSearchText
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then(res => res.body)
+            .then(res => JSON.parse(JSON.stringify(res.data), serializeDateInJSON))
+        
+        expect(res).toHaveLength(1);
+        expect(res[0].from).toBe(FACULTY_DOMAINS.ANKARA_UNI_OGR_DEKANLIK.name)
+        expect(res[0].date).toEqual(new Date("2024-09-26T16:00:00.000Z"))
+        expect(notifData.filter( (rs: INotification) => rs.notificationTitle.search(sampleSearchText) >= 0 && rs.from === FACULTY_DOMAINS.ANKARA_UNI_OGR_DEKANLIK.name)).toHaveLength(1);
+        expect(notifData.filter( (rs: INotification) => rs.notificationTitle.search(sampleSearchText) < 0 )).toHaveLength(3);
+    })
+    it('015 - Should return 200 and related list of data when valid facultyList, timeUntil and text are given in request body', async () => {
+        expect.assertions(4)
+        const sampleFacultyList = [FACULTY_DOMAINS.ANKARA_UNI_BILGISAYAR.name, FACULTY_DOMAINS.ANKARA_UNI_OGR_DEKANLIK.name ,FACULTY_DOMAINS.ANKARA_UNI_ELEKTRIK_ELEKTRONIK.name];
+        const facultyListThatShouldBeInBody = [FACULTY_DOMAINS.ANKARA_UNI_ELEKTRIK_ELEKTRONIK.name, FACULTY_DOMAINS.ANKARA_UNI_OGR_DEKANLIK.name]
+        const sampleSearchText= 'Title'
+        const sampleDate = '2024-08-26T16:00:00.000Z'
+        const res = await request(app)
+            .post('/notifications')
+            .send({
+                facultyList: sampleFacultyList,
+                timeUntil: sampleDate,
+                searchText : sampleSearchText
+            })
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then(res => res.body)
+            .then(res => JSON.parse(JSON.stringify(res.data), serializeDateInJSON))
+        
+        expect(res).toHaveLength(2);
+        expect(res.map((p: INotification) => p.from)).toEqual(expect.arrayContaining(facultyListThatShouldBeInBody))
+        expect(res.every(( r: INotification) => isDateAfterThanOther(r.date.toISOString(), sampleDate))).toBeTruthy();
+        const requestedDataInList = notifData.filter( (rs: INotification) => rs.notificationTitle.search(sampleSearchText) >= 0 && facultyListThatShouldBeInBody.includes(rs.from) && isDateAfterThanOther(rs.date.toISOString(), sampleDate))  
+        expect(requestedDataInList).toHaveLength(2);
+    })
  
 })
