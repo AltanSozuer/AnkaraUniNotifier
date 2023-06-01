@@ -51,7 +51,7 @@ describe('fetchOne()',  () => {
     it('fetchOne() function should return null when db is empty', async () => {
         expect.assertions(1)
         const sampleEmail = 'jack@hotmail.com'
-        const users = await userService.fetchOne(sampleEmail)
+        const users = await userService.fetchOneWithoutPassword(sampleEmail)
         expect(users).toBeNull();
     })
 
@@ -65,7 +65,7 @@ describe('fetchOne()',  () => {
             password: 'jack123'
         }
         await userService.create(userObj);
-        const userInDb = await userService.fetchOne(userObj.email);
+        const userInDb = await userService.fetchOneWithoutPassword(userObj.email);
 
         expect(userInDb?.name).toBe(userObj.name);
         expect(userInDb?.surname).toBe(userObj.surname);
@@ -147,7 +147,7 @@ describe.only('delete()',  () => {
         expect(deletedUserInDb.surname).toBe(userObj.surname);
         expect(deletedUserInDb.email).toBe(userObj.email);
 
-        const afterDelete = await userService.fetchOne(userObj.email)
+        const afterDelete = await userService.fetchOneWithoutPassword(userObj.email)
         expect(afterDelete).toBeNull();
     })
 
