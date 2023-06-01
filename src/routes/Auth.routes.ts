@@ -36,8 +36,16 @@ router.post('/register',
         if(validationRes.isEmpty()) {
             try {
                 const { name, surname, email, password }  = req.body;
-                logger.debug('POST /notifications given parameters: ', { name, surname, email, password })
-                const createdUser = await new UserService().create({ name, surname, email, password })
+                const userService = new UserService();
+                logger.debug('POST /register given parameters: ', { name, surname, email, password })
+
+                const checkUserAlreadyRegistered = await userService.fetchOne(email);
+                if(checkUserAlreadyRegistered){
+                    const errDetailObj = { msg: 'User is already exist who has given email', email };
+                    logger.debug('POST /register is failed parameters: ', errDetailObj)
+                    return res.status(400).json({ error: errDetailObj })
+                } 
+                const createdUser = await userService.create({ name, surname, email, password })
                 res.status(201).json({ data: createdUser })
             }
             catch(err) {

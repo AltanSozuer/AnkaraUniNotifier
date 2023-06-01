@@ -46,8 +46,42 @@ describe('POST /register Success', () => {
     })
 })
 
+describe('POST /register Exist User Checking', () => {
+    let userData: IUser= {
+        name: 'samplename',
+        surname: 'sampleSurname',
+        email: 'sampleUserName@gmail.com',
+        password: 'samplePassword'
+    }
+    beforeEach( async () => {
+        await MongoDBService.clearCollections();
+        await new UserService().create(userData);
+    })
 
-describe.only('POST /register Validation Tests', () => {
+    it('Should return 400 when given user email already exist in db', async () => {
+        expect.assertions(1);
+        let anotherUserData: IUser= {
+            name: 'another-name',
+            surname: 'another-surname',
+            email: userData.email,
+            password: 'another-samplePassword'
+        }
+        const result = await request(app)
+            .post(REGISTER_ENDPOINT)
+            .send(anotherUserData)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .then( res => res.body.error)
+       
+        expect(result).toEqual(expect.objectContaining({
+            msg: 'User is already exist who has given email',
+            email: anotherUserData.email
+        }))
+    })
+})
+
+describe('POST /register Validation Tests', () => {
     
     const funcToRun = async (param: any, msg: string, field: string) => {
         const result = await request(app)

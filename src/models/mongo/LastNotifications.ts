@@ -25,8 +25,7 @@ const NotificationRaw = {
     },
     guidLink: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     }
 }
 
