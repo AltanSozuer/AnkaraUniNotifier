@@ -4,7 +4,7 @@ configureEnvFile();
 import IUser from '../../src/models/dto/User.dto';
 import UserService from '../../src/services/UserService';
 import MongoDBService from '../../src/services/MongoDBService';
-import { describe, afterAll, it, jest, expect} from '@jest/globals'
+import { describe, afterAll, it, jest, expect, beforeAll, beforeEach} from '@jest/globals'
 
 
 jest.setTimeout(5000);
@@ -23,18 +23,20 @@ describe('create()',  () => {
     })
 
     it('create() function should create user in db', async () => {
-        expect.assertions(3)
+        expect.assertions(4)
         const userObj: IUser = {
             name: 'Jack',
             surname: 'Jackson',
-            email: 'jack@hotmail.com'
+            email: 'jack@hotmail.com',
+            password: 'samplepass123'
         }
         let userService = new UserService()
         const result = await userService.create(userObj);
-
+       
         expect(result?.name).toBe(userObj.name);
         expect(result?.surname).toBe(userObj.surname);
         expect(result?.email).toBe(userObj.email);
+        expect(result).toHaveProperty('_id')
 
     })
 })
@@ -59,7 +61,8 @@ describe('fetchOne()',  () => {
         const userObj: IUser = {
             name: 'Jack',
             surname: 'Jackson',
-            email: 'jack@hotmail.com'
+            email: 'jack@hotmail.com',
+            password: 'jack123'
         }
         await userService.create(userObj);
         const userInDb = await userService.fetchOne(userObj.email);
@@ -86,18 +89,20 @@ describe('update()',  () => {
         const userObj: IUser = {
             name: 'Jack',
             surname: 'Jackson',
-            email: 'jack@hotmail.com'
+            email: 'jack@hotmail.com',
+            password: 'jack123'
         }
         const result = await userService.create(userObj);
-
+        
         const newUserObj = {
             name: 'NewJack',
             surname: 'NewJackson',
-            email: 'jack@hotmail.com'
+            email: 'jack@hotmail.com',
+            password: 'newjack321'
         }
 
         const newUserInDb = await userService.update( userObj.email, newUserObj);
-    
+        
         expect(newUserInDb.name).toBe(newUserObj.name);
         expect(newUserInDb.surname).toBe(newUserObj.surname);
         expect(newUserInDb.email).toBe(newUserObj.email);
@@ -109,7 +114,8 @@ describe('update()',  () => {
         const newUserObj = {
             name: 'NewJack',
             surname: 'NewJackson',
-            email: 'jack@hotmail.com'
+            email: 'jack@hotmail.com',
+            password: 'jack123'
         }
 
         const newUserInDb = await userService.update( newUserObj.email, newUserObj);
@@ -117,7 +123,7 @@ describe('update()',  () => {
     })
 })
 
-describe('delete()',  () => {
+describe.only('delete()',  () => {
     
     let userService: UserService;
     beforeEach( async () => {
@@ -125,12 +131,13 @@ describe('delete()',  () => {
         await MongoDBService.clearCollections();
     })
 
-    it('update() function should update related user information who has given email', async () => {
-        expect.assertions(3)
+    it('delete() function should delete related user information who has given email', async () => {
+        expect.assertions(4)
         const userObj: IUser = {
             name: 'Jack',
             surname: 'Jackson',
-            email: 'jack@hotmail.com'
+            email: 'jack@hotmail.com',
+            password: 'jack123'
         }
         await userService.create(userObj);
 
@@ -139,6 +146,9 @@ describe('delete()',  () => {
         expect(deletedUserInDb.name).toBe(userObj.name);
         expect(deletedUserInDb.surname).toBe(userObj.surname);
         expect(deletedUserInDb.email).toBe(userObj.email);
+
+        const afterDelete = await userService.fetchOne(userObj.email)
+        expect(afterDelete).toBeNull();
     })
 
     it('delete() function should return null when given email address is not exist in db', async () => {

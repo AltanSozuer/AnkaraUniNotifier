@@ -9,7 +9,11 @@
     "start:quick": "cross-env APP_STATE=production node build/start.js",
     "build": "rimraf ./build && tsc",
     "test:integration": " cross-env APP_STATE=test jest --verbose ./test/integration/",
-    "test:e2e": "cross-env APP_STATE=test jest --verbose ./test/e2e/"
+    "test:integ:UserService": " cross-env APP_STATE=test jest --verbose ./test/integration/UserService.test.ts",
+    "test:integ:NotificationService": " cross-env APP_STATE=test jest --verbose ./test/integration/NotificationService.test.ts",
+    "test:e2e": "cross-env APP_STATE=test jest --verbose ./test/e2e/",
+    "test:e2e:notif": "cross-env APP_STATE=test jest --verbose ./test/e2e/Notification.test.ts",
+    "test:e2e:users": "cross-env APP_STATE=test jest --verbose ./test/e2e/Users.test.ts"
   },
   "repository": {
     "type": "git",

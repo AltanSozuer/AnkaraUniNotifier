@@ -11,9 +11,9 @@ router.post('/notifications',
     body('timeUntil').optional().isString().isLength({ min: 2 }).custom(isDateValid).escape(),
     body('searchText').optional().isString().escape(),
     async (req: Request, res: Response, next: NextFunction) => {
-    logger.info('GET /notifications is called')
+    logger.info('POST /notifications is called')
     const validResult: Result = validationResult(req);
-    logger.debug('GET /notifications parameter validation result: ', {
+    logger.debug('POST /notifications parameter validation result: ', {
         result: validResult
     })
 
@@ -21,7 +21,7 @@ router.post('/notifications',
 
         const { facultyList, timeUntil, searchText } = req.body;
         
-        logger.debug('GET /notifications given parameters: ', {
+        logger.debug('POST /notifications given parameters: ', {
             facultyList,
             timeUntil,
             searchText
@@ -31,7 +31,7 @@ router.post('/notifications',
             validFacultyNames = filterNamesThatExistInFacultyList(facultyList);
         }
         if(facultyList?.length && !validFacultyNames.length) {
-            logger.error('GET /notifications | Given faculty names are not valid : ', {
+            logger.error('POST /notifications | Given faculty names are not valid : ', {
                 facultyList,
                 validFacultyNames
             })
@@ -42,14 +42,14 @@ router.post('/notifications',
         }    
         else{
             const results = await new NotificationService().byFacultyList(facultyList).byTime(timeUntil).byText(searchText).getNotifications();
-            logger.debug('GET /notifications | List of notification data will be send: ', {
+            logger.debug('POST /notifications | List of notification data will be send: ', {
                 dataList: results
             })
             res.status(200).json({ data: results })
         }
     }
     else{
-        logger.error('GET /notifications | Parameters are not valid : ', {
+        logger.error('POST /notifications | Parameters are not valid : ', {
             result: validResult.array()
         })
         res.status(400).json({ error: validResult.array() })
