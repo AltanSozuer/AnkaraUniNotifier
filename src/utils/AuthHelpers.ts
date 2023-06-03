@@ -24,13 +24,10 @@ async function isPasswordEqualToItsHashedVersion(password: string, hash: string)
     return bcrypt.compare(password, hash);
 }
 
-function getRefreshToken() {
-    return uid(256);
-}
+
 
 export {
     generateAccessToken,
     hashPassword,
-    getRefreshToken,
     isPasswordEqualToItsHashedVersion
 }

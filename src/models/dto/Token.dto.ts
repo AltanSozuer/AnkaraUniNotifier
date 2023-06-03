@@ -1,6 +1,7 @@
 interface IToken {
     refreshToken: string;
-    user: object;
+    userId: object;
+    createdAt: Date
 }
 
 

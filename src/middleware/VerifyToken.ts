@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jsonwebtoken from "jsonwebtoken";
-const { JWT_TOKEN_SECRET } = process.env;
+const { JWT_ACCESS_TOKEN_SECRET } = process.env;
 
 function verifyRefreshBodyField(req: Request, res: Response, next: NextFunction) {
     if(req.body && req.body.refreshToken) {
@@ -19,7 +19,7 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
         return res.status(401).json({ msg: 'Authentication invalid' })
     }
 
-    jsonwebtoken.verify(token as string, JWT_TOKEN_SECRET as string, (err, decodedPayload) => {
+    jsonwebtoken.verify(token as string, JWT_ACCESS_TOKEN_SECRET as string, (err, decodedPayload) => {
         if(err) {
             return res.status(403).json({ msg: 'Authentication invalid' })
         }

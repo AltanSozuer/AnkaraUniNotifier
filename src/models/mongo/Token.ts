@@ -7,10 +7,14 @@ const TokenRaw = {
         type: String,
         required: true
     },
-    user: {
+    userId: {
         type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'Users'
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        expires: 86400 * 30
     }
 }
 

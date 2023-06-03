@@ -11,6 +11,7 @@
     "test:integration": " cross-env APP_STATE=test jest --verbose ./test/integration/",
     "test:integ:UserService": " cross-env APP_STATE=test jest --verbose ./test/integration/UserService.test.ts",
     "test:integ:NotificationService": " cross-env APP_STATE=test jest --verbose ./test/integration/NotificationService.test.ts",
+    "test:integ:TokenService": " cross-env APP_STATE=test jest --verbose ./test/integration/TokenService.test.ts",
     "test:e2e": "cross-env APP_STATE=test jest --verbose ./test/e2e/",
     "test:e2e:notif": "cross-env APP_STATE=test jest --verbose ./test/e2e/Notification.test.ts",
     "test:e2e:auth": "cross-env APP_STATE=test jest --verbose ./test/e2e/Auth.test.ts"
