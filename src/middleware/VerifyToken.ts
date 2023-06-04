@@ -23,7 +23,7 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
         if(err) {
             return res.status(403).json({ msg: 'Authentication invalid' })
         }
-        res.locals.user = decodedPayload;
+        req.user = decodedPayload as {_id?: object, email?: string } ;
         next();
     })
 }

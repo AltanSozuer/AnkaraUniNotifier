@@ -6,14 +6,12 @@ class UserService {
     constructor() {
     }
 
-    async fetchOneWithoutPassword(email?: string) {
-        let query = email ? { email: email } : {}
-        return UsersModel.findOne(query).select('-password');
+    async fetchOneWithoutPassword(email: string) {
+        return UsersModel.findOne({email}).select('-password');
     }
 
-    async fetchOneWithPassword(email?: string) {
-        let query = email ? { email: email } : {}
-        return UsersModel.findOne(query);
+    async fetchOneWithPassword(email: string) {
+        return UsersModel.findOne({email});
     }
 
     async create(userFields: IUser) {
