@@ -6,6 +6,27 @@ import loggerFunc from '../utils/Logger';
 const router = express.Router();
 const logger = loggerFunc(__filename);
 
+/**
+ * @api {post} /notifications Request Notifications
+ * @apiBody {String[]} [facultyList] Faculty list of related notifications.
+ * @apiBody {String} [timeUntil]     Time period that from timeUntil to now.
+ * @apiBody {String} [searchText]    searchText that notification data might contain in their titles.
+ * 
+ * @apiName GetNotifications
+ * @apiGroup Notifications
+ *
+ * @apiSuccess {Object} notificationData Notification data in db.
+ * @apiSuccess {String} notificationData._id  id of the Notification data.
+ * @apiSuccess {String} notificationData.from  from property of the Notifications data.
+ * @apiSuccess {String} notificationData.notificationTitle  notificationTitle of the Notifications data.
+ * @apiSuccess {String} notificationData.notificationContent  notificationContent of the Notifications data.
+ * @apiSuccess {String} notificationData.link  link of the Notifications data.
+ * @apiSuccess {String} notificationData.guidLink  guidLink of the Notifications data.
+ * 
+ *
+ * @apiError Bad Request Given params are not valid.
+ *
+ */
 router.post('/notifications', 
     body('facultyList').optional().isLength({ min: 1 }).custom(isStringArray).escape(),
     body('timeUntil').optional().isString().isLength({ min: 2 }).custom(isDateValid).escape(),

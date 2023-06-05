@@ -8,7 +8,35 @@ import TokenService from '../services/TokenService';
 const router = express.Router();
 const logger = loggerFunc(__filename);
 
-
+/**
+ * @api {post} /register Request Register
+ * @apiBody {String} name Faculty list of related notifications.
+ * @apiBody {String} surname Faculty list of related notifications.
+ * @apiBody {String} email Faculty list of related notifications.
+ * @apiBody {String} password Faculty list of related notifications.
+ * 
+ * @apiGroup Auth
+ *
+ * @apiSuccess {Object} user User data in db.
+ * @apiSuccess {String} user._id  id of the User data.
+ * @apiSuccess {String} user.name  name property of the User data.
+ * @apiSuccess {String} user.surname  surname of the User data.
+ * @apiSuccess {String} user.email  email of the User data.
+ * @apiSuccess {String} user.password  password of the User data.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "name": "John",
+ *       "surname": "Doe",
+ *       "email": "john@sample.com"
+ *       "surname": "samplepassword"
+ *     }
+ *
+ * @apiError Bad Request Given params are not valid.
+ * @apiError Bad Request User is already exist.
+ * @apiError Internal Server Error Registration is failed.
+ *
+ */
 router.post('/register',
     body('name')
         .exists().withMessage('name must be exist').bail()
@@ -70,6 +98,25 @@ router.post('/register',
     }    
 )
 
+
+/**
+ * @api {post} /login Request Login
+ * @apiBody {String} email Faculty list of related notifications.
+ * @apiBody {String} password Faculty list of related notifications.
+ * 
+ * @apiGroup Auth
+ *
+ * @apiSuccess {Object} data 
+ * @apiSuccess {String} data.accessToken  accessToken of the user.
+ * @apiSuccess {String} data.refreshToken  refreshToken of the user.
+ * 
+ *
+ * @apiError Bad Request Given params are not valid.
+ * @apiError Bad Request Invalid email or password.
+ * @apiError Internal Server Error Login is failed.
+ *
+ */
+
 router.post('/login',
     body('email')
         .exists().withMessage('email must be exist').bail()
@@ -126,6 +173,22 @@ router.post('/login',
         }
 })
 
+
+/**
+ * @api {post} /auth/refreshToken Request accessToken
+ * @apiBody {String} refreshToken refreshToken of related user.
+ * 
+ * @apiGroup Auth
+ *
+ * @apiSuccess {Object} data 
+ * @apiSuccess {String} data.accessToken  accessToken of the user.
+ * 
+ *
+ * @apiError Bad Request Given refreshToken is not valid.
+ * @apiError Bad Request refreshToken is not given.
+ * @apiError Internal Server Error Request refreshToken is failed.
+ *
+ */
 router.post('/auth/refreshToken',
     body('refreshToken').exists().withMessage('refreshToken must be exist').bail().escape(),
     async (req: Request, res: Response) => {
@@ -170,7 +233,21 @@ router.post('/auth/refreshToken',
         }
 })
 
-
+/**
+ * @api {delete} /logut Request logout
+ * @apiBody {String} refreshToken refreshToken of related user.
+ * 
+ * @apiGroup Auth
+ *
+ * @apiSuccess {Object} data 
+ * @apiSuccess {String} data.message  Success.
+ * 
+ *
+ * @apiError Bad Request Given refreshToken is not valid.
+ * @apiError Bad Request refreshToken is not given.
+ * @apiError Internal Server Error Logout is failed.
+ *
+ */
 router.delete('/logout',
     body('refreshToken').exists().withMessage('refreshToken must be exist').bail().escape(),
     async (req: Request, res: Response) => {

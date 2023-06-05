@@ -4,6 +4,7 @@
   "description": "",
   "main": "build/start.js",
   "scripts": {
+    "api:doc": "apidoc -i src/ -o apidoc/ ",
     "start": "cross-env APP_STATE=production npm run build && npm run start:quick",
     "start:dev": "npx nodemon",
     "start:quick": "cross-env APP_STATE=production node build/start.js",
