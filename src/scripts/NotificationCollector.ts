@@ -56,7 +56,6 @@ export function notificationCollector() {
 
             }
             else{
-                console.log('Rss result is empty array. Result: ',results);
                 logger.debug('Rss result is empty array. Result: ', {
                     results
                 })

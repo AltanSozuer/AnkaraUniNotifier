@@ -10,7 +10,6 @@ class RssService {
     async parseURL(facultyURL: string): Promise<IRssFeedItem[]>  {
        try {
         const feed = await this.rssParser.parseURL(facultyURL)
-        console.log('My feed: ', JSON.stringify(feed.items[0]));
         return feed?.items;
        }
        catch(err) {

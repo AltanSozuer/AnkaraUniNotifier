@@ -234,7 +234,7 @@ router.post('/auth/refreshToken',
 })
 
 /**
- * @api {delete} /logut Request logout
+ * @api {delete} /logout Request logout
  * @apiBody {String} refreshToken refreshToken of related user.
  * 
  * @apiGroup Auth

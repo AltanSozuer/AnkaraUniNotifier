@@ -49,11 +49,10 @@ export class GMailService implements IMailer {
                 }
             } as SMTPTransport.Options)
 
-            const result = await transporter.sendMail(mailOptions);
-            console.log('result: ',result)
+            await transporter.sendMail(mailOptions);
         }
         catch(err) {
-            console.log('Error: GmailService.sendMail is failed :D', err );
+            console.log('Error: GmailService.sendMail is failed: ', err );
         }
     }
 }

@@ -46,8 +46,6 @@ export class NotificationService {
             return result
         }
         catch(err) {
-            console.log('mine error: asd: ',err);
-            
             logger.debug('NotificationService.createNotification() is failed. Error: ', { error: err })
             throw new Error('NotificationService.createNotification() is failed')
         }

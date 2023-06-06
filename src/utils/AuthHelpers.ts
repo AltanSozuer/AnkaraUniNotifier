@@ -1,6 +1,5 @@
 import jsonwebtoken from "jsonwebtoken";
 import bcrypt from 'bcrypt';
-import { uid } from "rand-token";
 const { JWT_TOKEN_SECRET, JWT_ACCESS_TOKEN_EXP } = process.env;
 
 function generateAccessToken(email: string): string {
