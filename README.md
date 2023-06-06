@@ -67,7 +67,7 @@ cd AnkaraUniNotifier/ && npm start
 If there is an error during transpilation to javascript like
 
 ```
-node_modules/@types/rimraf/index.d.ts:33:21 - error TS2694: Namespace '"C:/Users/sozue/AUNotif/AnkaraUniNotifier/node_modules/glob/dist/mjs/index"' has no exported member 'IOptions'.
+node_modules/@types/rimraf/index.d.ts:33:21 - error TS2694: Namespace '"C:/Users/user/AnkaraUniNotifier/node_modules/glob/dist/mjs/index"' has no exported member 'IOptions'.
 
 33         glob?: glob.IOptions | false | undefined;
                        ~~~~~~~~
